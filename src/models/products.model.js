@@ -39,10 +39,6 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: 'admin'
-    },
-    forTesting: {
-        type: Boolean,
-        default: false
     }
 }, {
     versionKey: false // Se excluye el campo _v globalmente

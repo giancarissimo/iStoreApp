@@ -53,10 +53,6 @@ const googleUserSchema = new mongoose.Schema({
     last_connection: {
         type: Date,
         default: Date.now
-    },
-    forTesting: {
-        type: Boolean,
-        default: false
     }
 }, {
     versionKey: false // Se excluye el campo _v globalmente

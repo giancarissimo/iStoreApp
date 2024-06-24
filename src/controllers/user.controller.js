@@ -25,6 +25,34 @@ class UserController {
         }
     }
 
+    async changeUserRole(req, res) {
+        try {
+            const { uid } = req.params
+            const user = await UserModel.findOne({ id: uid })
+
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' })
+            }
+
+            // Se verifica si el usuario ha cargado los documentos requeridos
+            const requiredDocuments = ['Proof of account status.pdf']
+            const userDocuments = user.documents.map(doc => doc.name)
+            const hasRequiredDocuments = requiredDocuments.every(doc => userDocuments.includes(doc))
+
+            if (!hasRequiredDocuments) {
+                return res.status(400).json({ message: 'The user must upload the following documents: Proof of account status.pdf' })
+            }
+
+            const newRole = user.role === 'user' ? 'premium' : 'user'
+
+            const updatedUser = await UserModel.findByIdAndUpdate(uid, { role: newRole }, { new: true })
+            res.status(200).json({ updatedUser })
+        } catch (error) {
+            logger.error('Error changing user role:', error)
+            res.status(500).json({ message: 'Internal server error' })
+        }
+    }
+
     async deleteUser(req, res) {
         const userId = req.params.uid
         try {
@@ -33,6 +61,7 @@ class UserController {
                 return res.status(404).json({ message: 'User not found' })
             }
 
+            await emailServices.sendUserDeletionEmail(user.email, user.first_name, user.last_name)
             await CartModel.findByIdAndDelete(user.cart)
             await UserModel.findByIdAndDelete(userId)
             res.status(200).json({ message: 'User deleted successfully', user: user })
@@ -44,8 +73,8 @@ class UserController {
 
     async deleteInactiveUsers(req, res) {
         try {
-            // const thresholdDate = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // Últimos 2 días
-            const thresholdDate = new Date(Date.now() - 5 * 60 * 1000) // Últimos 5 minutos
+            // const thresholdDate = new Date(Date.now() - 5 * 60 * 1000) // Últimos 5 minutos
+            const thresholdDate = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // Últimos 2 días
             const inactiveUsers = await UserModel.find({ last_connection: { $lt: thresholdDate } })
 
             // Se verifica si no hay usuarios inactivos para eliminar
@@ -54,7 +83,7 @@ class UserController {
             }
 
             for (const user of inactiveUsers) {
-                await emailServices.sendUserDeletionEmail(user.email, user.first_name, user.last_name)
+                await emailServices.sendUserInactivityDeletionEmail(user.email, user.first_name, user.last_name)
                 await CartModel.findByIdAndDelete(user.cart)
                 await UserModel.findByIdAndDelete(user._id)
             }
@@ -403,7 +432,7 @@ class UserController {
 
         try {
             // Se valida si existe el usuario en la base de datos
-            const user = await userRepository.findById(uid)
+            const user = await UserModel.findOne({ id: uid })
             if (!user) {
                 return res.status(404).json({ message: 'User not found' })
             }
@@ -436,34 +465,6 @@ class UserController {
             res.status(200).json({ message: 'Documents uploaded successfully' })
         } catch (error) {
             logger.error('Error uploading user documents:', error)
-            res.status(500).json({ message: 'Internal server error' })
-        }
-    }
-
-    async changeUserRole(req, res) {
-        try {
-            const { uid } = req.params
-            const user = await UserModel.findById(uid)
-
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' })
-            }
-
-            // Se verifica si el usuario ha cargado los documentos requeridos
-            const requiredDocuments = ['Identification', 'Proof of address', 'Proof of account status']
-            const userDocuments = user.documents.map(doc => doc.name)
-            const hasRequiredDocuments = requiredDocuments.every(doc => userDocuments.includes(doc))
-
-            if (!hasRequiredDocuments) {
-                return res.status(400).json({ message: 'The user must upload the following documents: Identification, Proof of address, Proof of account status' })
-            }
-
-            const newRole = user.role === 'user' ? 'premium' : 'user'
-
-            const updatedUser = await UserModel.findByIdAndUpdate(uid, { role: newRole }, { new: true })
-            res.status(200).json({ updatedUser })
-        } catch (error) {
-            logger.error('Error changing user role:', error)
             res.status(500).json({ message: 'Internal server error' })
         }
     }

@@ -50,7 +50,7 @@ function deleteProductInCart(cartId, productId, productTitle) {
 
             // Se muestra la notificación
             cartNotifText.textContent = `${productTitle} was removed from your bag. Any associated offers have also been removed.`
-            cartNotification.classList.add('active')
+            setTimeout(() => { cartNotification.classList.add('active') }, 200)
 
             // Se comprueba si el carrito está vacío
             if (cartProductList.children.length === 0) {
@@ -79,8 +79,9 @@ function clearCart(cartId) {
 
             document.getElementById("header_global").scrollIntoView({ behavior: 'smooth' }) // Se desplaza suave hacia arriba
 
+            // Se muestra la notificación
             cartNotifText.textContent = `All products were removed from your bag. Any associated offers have also been removed.`
-            cartNotification.classList.add('active') // Se muestra la notificación
+            setTimeout(() => { cartNotification.classList.add('active') }, 200)
 
             document.querySelector('.header_icons_bag_notification').classList.remove('active') // se quitan las cantidades del icono del cart
         })

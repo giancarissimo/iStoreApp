@@ -254,3 +254,37 @@ const deleteProduct = (_id) => {
     document.body.style.overflow = ""
     socket.emit("deleteProductForAdmin", _id)
 }
+
+// ------------------- Users -------------------- //
+
+socket.on("users", (data) => {
+    renderUsers(data)
+})
+
+// Función para renderizar la tabla de usuarios
+const renderUsers = (users) => {
+    const tbody = document.querySelector("#usersTable tbody")
+    tbody.innerHTML = ''
+
+    // Se crean todas las filas de la tabla de una vez
+    const rowsHTML = users.map(user => `
+        <tr>
+            <td data-label="Username">${user.username}</td>
+            <td data-label="Email">${user.email}</td>
+            <td data-label="Role">${user.role}</td>
+            ${user.documents.length === 0 ? '<td data-label="Documents"> - </td>' : `<td data-label="Documents">${user.documents[0].name}</td>`}
+            ${user.documents.length === 0 ? `<td data-label="Action"><button onclick="deleteUser('${user._id}')" class="btn_deleteUser">Delete</button></td>` : `<td data-label="Action"><button onclick="deleteUser('${user._id}')" class="btn_deleteUser">Delete</button><button onclick="changeUserRole('${user._id}')" class="btn_changeRoleUser">Change role</button></td>`}
+        </tr>
+    `).join("")
+
+    // Se insertan las filas en el tbody
+    tbody.innerHTML = rowsHTML
+}
+
+const deleteUser = (_id) => {
+    socket.emit("deleteUser", _id)
+}
+
+const changeUserRole = (_id) => {
+    socket.emit("changeUserRole", _id)
+}

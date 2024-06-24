@@ -78,6 +78,28 @@ class EmailServices {
                 subject: 'Account Deletion',
                 html: `
                 <h1>Dear ${first_name} ${last_name},</h1>
+                <p>Your account has been deleted due to non-compliance with our policies.</p>
+                <p>If you have any questions or need further assistance, please feel free to contact our support team.</p>
+                <p>Thank you for your understanding.</p>
+                <p>Sincerely,</p>
+                <p>The iStore Team.</p>
+                `
+            }
+            await this.transporter.sendMail(mailOptions)
+        } catch (error) {
+            console.error('Error sending email:', error)
+            throw new Error('Error sending email')
+        }
+    }
+
+    async sendUserInactivityDeletionEmail(email, first_name, last_name) {
+        try {
+            const mailOptions = {
+                from: `iStore App ${email_user}`,
+                to: email,
+                subject: 'Account Deletion - Inactivity',
+                html: `
+                <h1>Dear ${first_name} ${last_name},</h1>
                 <p>Your account has been deleted due to inactivity.</p>
                 <p>If you have any questions or need further assistance, please feel free to contact our support team.</p>
                 <p>Thank you for your understanding.</p>

@@ -5,7 +5,7 @@ const hamburguerMenu = document.querySelector('.menu-icon-container')
 const iconBagNotification = document.querySelector('.header_icons_bag_notification')
 let isHeaderOpened = false
 
-Number(iconBagNotification.textContent) > 0 ? iconBagNotification.classList.add('active') : iconBagNotification.classList.remove('active')
+iconBagNotification ? (Number(iconBagNotification.textContent) > 0 ? iconBagNotification.classList.add('active') : iconBagNotification.classList.remove('active')) : ''
 
 const handleHamburguerMenu = () => {
     hamburguerMenu.addEventListener('click', () => {
