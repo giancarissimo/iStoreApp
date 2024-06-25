@@ -117,6 +117,6 @@ app.use((req, res, next) => {
 // Websockets
 new SocketManager(server)
 
-server.listen(PORT, app_host, () => {
+server.listen(PORT, `${app_host}`, () => {
     logger.info(`Server is running at http://localhost:${PORT}`)
 })
