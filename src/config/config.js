@@ -10,6 +10,7 @@ dotenv.config({
 const configObject = {
     node_env: process.env.NODE_ENV,
     app_port: process.env.APP_PORT,
+    app_host: process.env.APP_HOST,
     mongo_url: process.env.MONGO_URL,
     email_user: process.env.EMAIL_USER,
     email_pass: process.env.EMAIL_PASS,

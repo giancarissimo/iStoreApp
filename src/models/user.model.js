@@ -2,6 +2,9 @@ import mongoose from "mongoose"
 
 // Se crea el schema y el model de usuarios
 const userSchema = new mongoose.Schema({
+    googleId : {
+        type: String,
+    },
     username: {
         type: String,
         required: true
@@ -12,7 +15,7 @@ const userSchema = new mongoose.Schema({
     },
     last_name: {
         type: String,
-        required: true
+        required: false
     },
     email: {
         type: String,
@@ -22,11 +25,11 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: false
     },
     age: {
         type: Number,
-        required: true
+        required: false
     },
     role: {
         type: String,

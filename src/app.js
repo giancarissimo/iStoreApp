@@ -9,7 +9,6 @@ import passport from 'passport'
 import { swaggerUi, specs } from './config/swagger.config.js'
 
 import UserModel from './models/user.model.js'
-import GoogleUserModel from './models/googleUser.model.js'
 import ProductController from './controllers/product.controller.js'
 import CartController from './controllers/cart.controller.js'
 import UserController from './controllers/user.controller.js'
@@ -34,7 +33,7 @@ import loggerRouter from './routes/logger.router.js'
 
 // Variables de entorno
 import configObject from './config/config.js'
-const { app_port, mongo_url } = configObject
+const { app_port, app_host, mongo_url } = configObject
 
 // Servidor
 const app = express()
@@ -82,7 +81,7 @@ app.use(authMiddleware)
 app.use(async (req, res, next) => {
     res.locals.user = req.user // Establecer datos del usuario para todas las vistas
     if (req.user && req.user.role !== 'admin') {
-        const user = !req.user.googleId ? await UserModel.findOne({ _id: req.user._id }).populate("cart") : await GoogleUserModel.findOne({ _id: req.user._id }).populate("cart")
+        const user = await UserModel.findOne({ _id: req.user._id }).populate("cart")
         const usercartProducts = user.cart.products
         let productos = 0
         for (let y = 0; y < usercartProducts.length; y++) {
@@ -118,6 +117,6 @@ app.use((req, res, next) => {
 // Websockets
 new SocketManager(server)
 
-server.listen(PORT, () => {
+server.listen(PORT, app_host, () => {
     logger.info(`Server is running at http://localhost:${PORT}`)
 })

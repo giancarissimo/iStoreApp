@@ -290,46 +290,36 @@ header {
 .header_logo a,
 .header_icons_search,
 .header_icons_bag,
-.header_icons_account,
-.header_icons_account a,
 .header_icons_hamburguer {
     width: 3rem;
     height: 4.4rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: default;
 }
 
 .header_logo svg,
 .header_icons_search,
-.header_icons_account a,
 .header_icons_bag div {
-    cursor: pointer;
     fill: var(--clr-header-font);
 }
 
 .home-header .header_logo svg,
 .home-header .header_icons_search,
-.home-header .header_icons_account a,
 .home-header .header_icons_bag div {
     fill: #ffffffb3;
 }
 
-.header_icons_account svg {
-    width: 3rem;
-    height: 3rem;
-}
-
 .header_logo svg:hover,
-.header_icons_search:hover,
-.header_icons_account a:hover,
+.header_icons_search svg:hover,
 .header_icons_bag div:hover {
+    cursor: pointer;
     fill: var(--clr-font);
 }
 
 .home-header .header_logo svg:hover,
-.home-header .header_icons_search:hover,
-.home-header .header_icons_account a:hover,
+.home-header .header_icons_search svg:hover,
 .home-header .header_icons_bag div:hover {
     fill: #ffffff;
 }

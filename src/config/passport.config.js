@@ -9,7 +9,7 @@ import CartServices from '../services/cartServices.js'
 const cartServices = new CartServices()
 
 // Traemos el UserModel y las funciones de bcrypt
-import GoogleUserModel from '../models/googleUser.model.js'
+import UserModel from '../models/user.model.js'
 
 // Traemos las variables de entorno
 import configObject from '../config/config.js'
@@ -35,19 +35,18 @@ const initializePassport = () => {
     }, async (accessToken, refreshToken, profile, done) => {
         try {
             // Se valida si ya existe un usuario de google en la base de datos
-            const user = await GoogleUserModel.findOne({ email: profile._json.email })
+            let user = await UserModel.findOne({ email: profile._json.email })
             if (!user) {
                 // Si el usuario no existe, crea uno nuevo
                 const googleProfileName = profile._json.name // Username original de google
                 const userName = googleProfileName.replace(/\s+/g, '').toLowerCase() // Se reemplazan espacios y se convierte a minúsculas
                 const newCart = await cartServices.createCart()
-                user = await GoogleUserModel.create({
+                user = await UserModel.create({
                     googleId: profile._json.sub,
                     username: userName,
                     first_name: profile._json.given_name,
                     last_name: profile._json.family_name,
                     email: profile._json.email,
-                    age: '',
                     cart: newCart._id
                 })
             }

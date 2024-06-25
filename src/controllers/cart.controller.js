@@ -1,6 +1,5 @@
 import UserModel from '../models/user.model.js'
 import ProductServices from '../services/productServices.js'
-import GoogleUserModel from '../models/googleUser.model.js'
 import CartServices from '../services/cartServices.js'
 import CartUtils from '../utils/cartUtils.js'
 import EmailServices from '../services/emailServices.js'
@@ -242,7 +241,7 @@ class CartController {
                 }
             }
 
-            const userWithCart = !req.user.googleId ? await UserModel.findOne({ cart: cartId }) : await GoogleUserModel.findOne({ cart: cartId })
+            const userWithCart = await UserModel.findOne({ cart: cartId })
 
             // Crear un ticket con los datos de la compra
             const ticket = new TicketModel({

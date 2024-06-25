@@ -53,7 +53,7 @@
                 </div>
             </div>
             {{#if user}}
-            <button id="addToCartInitial" data-cart="{{user.cart}}" data-product="{{product.id}}" onclick="postProduct()" data-ownerProduct="{{product.owner}}" data-userEmail="{{user.email}}"></button>
+            <button id="addToCartInitial" data-cart="{{user.cart}}" data-product="{{product.id}}" onclick="addProductToCart()" data-ownerProduct="{{product.owner}}" data-userEmail="{{user.email}}"></button>
             {{/if}}
             {{#unless user}}
             <a href="/cart/guest" class="itemDetail_add_to_bag"><button>Add to Bag</button></a>

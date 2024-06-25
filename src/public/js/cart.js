@@ -45,12 +45,23 @@ function deleteProductInCart(cartId, productId, productTitle) {
                 productElement.remove()
             }
 
-            // Se desplaza suave hacia arriba
-            document.getElementById("header_global").scrollIntoView({ behavior: 'smooth' })
+            // Crear un observador de intersección para detectar cuando el header_global es visible
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Se mostrar la notificación
+                        cartNotifText.textContent = `${productTitle} was removed from your bag. Any associated offers have also been removed.`
+                        cartNotification.classList.add('active')
 
-            // Se muestra la notificación
-            cartNotifText.textContent = `${productTitle} was removed from your bag. Any associated offers have also been removed.`
-            setTimeout(() => { cartNotification.classList.add('active') }, 200)
+                        observer.unobserve(entry.target) // Se dejar de observar el elemento una vez que se ha activado la notificación
+                    }
+                })
+            }, { threshold: 0.5 })
+
+            const headerElement = document.getElementById("header_global")
+            observer.observe(headerElement)
+
+            headerElement.scrollIntoView({ behavior: 'smooth' }) // Se desplaza suavemente hacia arriba
 
             // Se comprueba si el carrito está vacío
             if (cartProductList.children.length === 0) {

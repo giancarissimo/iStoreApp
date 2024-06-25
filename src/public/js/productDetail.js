@@ -1,8 +1,10 @@
-function postProduct() {
-    // Obtener el botón
+function addProductToCart() {
     const btn = document.querySelector('.itemDetail_add_to_bag')
+    const btnAdd = document.querySelector('#addToCartInitial')
 
-    // Obtener los datos del botón
+    btnAdd.disabled = true // Se deshabilita el botón
+
+    // Se obtienen los datos del botón
     const cart = btn.getAttribute('data-cart')
     const product = btn.getAttribute('data-product')
 
