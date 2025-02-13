@@ -118,5 +118,5 @@ app.use((req, res, next) => {
 new SocketManager(server)
 
 server.listen(PORT, `${app_host}`, () => {
-    logger.info(`Server is running at http://localhost:${PORT}`)
+    logger.info(`Server is running at http://${app_host}:${PORT}`)
 })
